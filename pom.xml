@@ -168,7 +168,7 @@
 	</profiles>
 
 	<build>
-		<finalName>common-data-service</finalName>
+		<finalName>Vue-login-springboot-api</finalName>
 		<plugins>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
@@ -191,6 +191,7 @@
 				<groupId>pl.project13.maven</groupId>
 				<artifactId>git-commit-id-plugin</artifactId>
 			</plugin>
+
 		</plugins>
 		<resources>
 			<resource>
