@@ -175,32 +175,22 @@
 				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>
 
-<!--			<plugin>-->
-<!--				<groupId>com.spotify</groupId>-->
-<!--				<artifactId>dockerfile-maven-plugin</artifactId>-->
-<!--				<version>1.4.3</version>-->
-<!--				<executions>-->
-<!--					<execution>-->
-<!--						<id>default</id>-->
-<!--						<goals>-->
-<!--							<goal>build</goal>-->
-<!--							<goal>push</goal>-->
-<!--						</goals>-->
-<!--					</execution>-->
-<!--				</executions>-->
-<!--				<configuration>-->
-<!--					<repository>duynghia1009/hello</repository>-->
-<!--					<tag>${project.version}</tag>-->
-<!--				</configuration>-->
-<!--				<dependencies>-->
-<!--					&lt;!&ndash; To make this work on JDK 9+ &ndash;&gt;-->
-<!--					<dependency>-->
-<!--						<groupId>javax.activation</groupId>-->
-<!--						<artifactId>javax.activation-api</artifactId>-->
-<!--						<version>1.2.0</version>-->
-<!--					</dependency>-->
-<!--				</dependencies>-->
-<!--			</plugin>-->
+
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+				<executions>
+					<execution>
+						<goals>
+							<goal>build-info</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>pl.project13.maven</groupId>
+				<artifactId>git-commit-id-plugin</artifactId>
+			</plugin>
 		</plugins>
 		<resources>
 			<resource>
