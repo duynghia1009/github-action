@@ -1,6 +1,7 @@
 package com.DDN.login.model;
 
 
+import com.DDN.login.model.info.ProductInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
@@ -48,6 +49,11 @@ public class User {
     @Column(name="updated_at")
     private Date updatedAt;
 
+    @JsonIgnore
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    @OneToMany(mappedBy = "addedByUser", fetch = FetchType.LAZY)
+    private List<ProductInfo> addedProducts;
+
 
 
     @ManyToMany(fetch = FetchType.LAZY)
@@ -69,11 +75,6 @@ public class User {
     @JsonIgnore
     private List<Reviews> reviews;
 
-
-
-
-
-
     public User() {
     }
 
@@ -90,6 +91,8 @@ public class User {
         this.email = email;
         this.createdAt = new Date();
     }
+
+
 
     public List<Reviews> getReviews() {
         return reviews;
@@ -177,5 +180,13 @@ public class User {
 
     public void setUpdatedAt(Date updatedAt) {
         this.updatedAt = updatedAt;
+    }
+    
+    public List<ProductInfo> getAddedProducts() {
+        return addedProducts;
+    }
+
+    public void setAddedProducts(List<ProductInfo> addedProducts) {
+        this.addedProducts = addedProducts;
     }
 }

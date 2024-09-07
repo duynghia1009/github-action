@@ -67,9 +67,10 @@ public class ApparelService {
             throw new ApparelNotFoundException("Apparel Category existed!");
         }
         ApparelCategory apparelCategory = new ApparelCategory();
+        apparelCategory.setId(apparelCategoryDTO.getId());
         apparelCategory.setType(apparelCategoryDTO.getType());
         apparelCategory.setCreatedDate(new Date());
-        apparelCategory.setCreatedDate(new Date());
+        apparelCategory.setUpdateDate(new Date());
         apparelCategoryRepository.save(apparelCategory);
     }
 

@@ -3,6 +3,7 @@ package com.DDN.login.security.service.interfaces;
 import com.DDN.login.dto.ProductDTOReceiveFromSQL;
 import com.DDN.login.dto.ProductDto;
 import com.DDN.login.dto.filter.*;
+import com.DDN.login.model.User;
 import com.DDN.login.model.categories.ApparelCategory;
 import com.DDN.login.model.categories.GenderCategory;
 import com.DDN.login.model.categories.PriceRangeCategory;
@@ -15,6 +16,7 @@ import com.DDN.login.model.info.ProductInfo;
 import com.DDN.login.payload.filter.FilterAttributesResponse;
 import com.DDN.login.payload.filter.HomeTabsDataResponse;
 import com.DDN.login.payload.filter.SearchSuggestionResponse;
+import com.DDN.login.repository.UserReposity;
 import com.DDN.login.repository.dao.categories.*;
 import com.DDN.login.repository.dao.images.ProductImagesRepository;
 import com.cloudinary.Cloudinary;
@@ -76,6 +78,9 @@ public class CommonDataServiceImpl implements CommonDataService {
 
     @Autowired
     private ProductImagesRepository productImagesRepository;
+
+    @Autowired
+    private UserReposity userReposity;
 
 
 
@@ -235,10 +240,11 @@ public class CommonDataServiceImpl implements CommonDataService {
         ApparelCategory apparelCategory = apparelCategoryRepository.findByType(productDto.getApparelName());
         GenderCategory genderCategory = genderCategoryRepository.findByType(productDto.getGenderName());
         ProductBrandCategory brandCategory = productBrandCategoryRepository.findByType(productDto.getBrandName());
-        String urlUpload = "";
+        // String urlUpload = "";
 
         List<String> urlUploadArray = new ArrayList<>();
         Optional<PriceRangeCategory> priceRangeCategory = findPriceRangeCategory(productDto.getPrice());
+        Optional<User> userName = userReposity.findByUsername(productDto.getUserName());
 
         try {
             List<MultipartFile> fileNames = new ArrayList<>();
@@ -260,7 +266,7 @@ public class CommonDataServiceImpl implements CommonDataService {
                     brandCategory, genderCategory, apparelCategory, priceRangeCategory.get(),
                     productDto.getPrice(),productDto.getStock(),
                     2, 5,
-                    true, urlUploadArray.get(0).toString(), productDto.getDescription());
+                    true, urlUploadArray.get(0).toString(), productDto.getDescription(), userName.get());
             productInfoRepository.save(productInfo);
 
             for(int i = 0; i < urlUploadArray.size(); i++) {
@@ -279,21 +285,5 @@ public class CommonDataServiceImpl implements CommonDataService {
         List<ProductInfo> productInfos = productInfoRepository.findAll();
         return productInfos;
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 }

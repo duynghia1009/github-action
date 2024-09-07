@@ -26,7 +26,17 @@ public class ProductDto {
     private String genderName;
     private String brandName;
     private Date updateDate;
+    private String userName;
     MultipartFile[] images;
+
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
 
 
     public MultipartFile[] getImages() {

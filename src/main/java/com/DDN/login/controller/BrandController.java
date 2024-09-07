@@ -1,12 +1,9 @@
 package com.DDN.login.controller;
 
 import com.DDN.login.common.ApiResponse;
-import com.DDN.login.dto.filter.ApparelCategoryDTO;
-import com.DDN.login.dto.filter.ApparelImagesDTO1;
 import com.DDN.login.dto.filter.BrandDTO;
 import com.DDN.login.dto.filter.BrandImagesDTO1;
 import com.DDN.login.exception.ApparelNotFoundException;
-import com.DDN.login.model.categories.ApparelCategory;
 import com.DDN.login.model.categories.ProductBrandCategory;
 import com.DDN.login.model.images.BrandImages;
 import com.DDN.login.repository.dao.categories.ProductBrandCategoryRepository;
@@ -53,20 +50,10 @@ public class BrandController {
     }
 
     @GetMapping("/getAllBrandCategory")
-    public ResponseEntity<Map<String,Object>> getAllBrandCategory(@RequestParam int page, @RequestParam int pagesize) {
-        List<ProductBrandCategory> brandCategories = new ArrayList<>();
-        Pageable pagingSort = PageRequest.of(page, pagesize);
-        Page<ProductBrandCategory> pageBrands;
-
-        pageBrands = brandCategoryRepository.findAll(pagingSort);
-        brandCategories = pageBrands.getContent();
-
-        Map<String,Object> response = new HashMap<>();
-        response.put("apparelCategories", brandCategories);
-        response.put("currentPage", pageBrands.getNumber());
-        response.put("totalItems", pageBrands.getTotalElements());
-        response.put("totalPages", pageBrands.getTotalPages());
-        return new ResponseEntity<>(response, HttpStatus.OK);
+    public ResponseEntity<List<ProductBrandCategory>> getAllBrandCategory() {
+        List<ProductBrandCategory> brandCategories = brandService.listBrandCategory();
+        
+        return new ResponseEntity<>(brandCategories, HttpStatus.OK);
     }
 
     @GetMapping("/getAllBrandImages")
@@ -110,9 +97,4 @@ public class BrandController {
         brandService.updateBrandImages(brandImagesDTO1);
         return new ResponseEntity<>(new ApiResponse(true, "You have updated Apparel Images"), HttpStatus.OK);
     }
-
-
-
-
-
 }

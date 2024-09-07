@@ -1,6 +1,7 @@
 package com.DDN.login.model.images;
 
 import com.DDN.login.model.categories.ProductBrandCategory;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -20,7 +21,8 @@ public class BrandImages {
 
 
     @ManyToOne(cascade = CascadeType.ALL, fetch =FetchType.LAZY)
-    @JoinColumn(name="brand_id", referencedColumnName = "id")
+    @JoinColumn(name="brand_id")
+    @JsonIgnore
     private ProductBrandCategory productBrandCategory;
 
     public BrandImages() {}
@@ -30,6 +32,12 @@ public class BrandImages {
         this.imageLocalPath = imageLocalPath;
         this.imageURL = imageURL;
         this.productBrandCategory = brandCategory;
+    }
+
+    public BrandImages(String title, String imageLocalPath, String imageURL) {
+        this.title = title;
+        this.imageLocalPath = imageLocalPath;
+        this.imageURL = imageURL;
     }
 
     public Date getCreatedDate() {

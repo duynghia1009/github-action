@@ -40,6 +40,12 @@ public class ApparelImages {
         this.genderCategory = genderCategory;
     }
 
+    public ApparelImages(String title, String imageLocalPath, String imageURL) {
+        this.title = title;
+        this.imageLocalPath = imageLocalPath;
+        this.imageURL = imageURL;
+    }
+
     public ApparelImages() {}
 
     public Date getCreatedDate() {

@@ -2,6 +2,7 @@ package com.DDN.login.model.info;
 
 import com.DDN.login.model.OrderItem;
 import com.DDN.login.model.Reviews;
+import com.DDN.login.model.User;
 import com.DDN.login.model.categories.ApparelCategory;
 import com.DDN.login.model.categories.GenderCategory;
 import com.DDN.login.model.categories.PriceRangeCategory;
@@ -74,6 +75,11 @@ public class ProductInfo implements Serializable {
     @JsonIgnore
     private List<OrderInfo> orders;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
+    @JsonIgnore
+    private User addedByUser;
+
     private String imageURL;
 
     public ProductInfo() {
@@ -83,7 +89,7 @@ public class ProductInfo implements Serializable {
                        GenderCategory genderCategory, ApparelCategory apparelCategory,
                        PriceRangeCategory priceRangeCategory,
                        double price, int availableQuantity, int deliveryTime, float ratings,
-                       boolean verificationStatus, String imageURL, String description) {
+                       boolean verificationStatus, String imageURL, String description, User addedByUser) {
         this.sellerId = sellerId;
         this.name = name;
         this.publicationDate = publicationDate;
@@ -98,7 +104,7 @@ public class ProductInfo implements Serializable {
         this.verificationStatus = verificationStatus;
         this.imageURL = imageURL;
         this.description = description;
-
+        this.addedByUser = addedByUser;               
 
     }
 
@@ -261,4 +267,13 @@ public class ProductInfo implements Serializable {
     public void setDescription(String description) {
         this.description = description;
     }
+
+    public User getAddedByUser() {
+        return addedByUser;
+    }
+
+    public void setAddedByUser(User addedByUser) {
+        this.addedByUser = addedByUser;
+    }
+
 }

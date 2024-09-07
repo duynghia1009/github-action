@@ -17,7 +17,7 @@ import com.DDN.login.security.jwt.JwtUtils;
 import com.DDN.login.security.jwt.Md5Util;
 
 import com.DDN.login.security.service.UserDetailsImpl;
-import com.DDN.login.security.service.UserDetailsServiceImpl;
+
 import com.DDN.login.security.service.auth.CustomUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -53,14 +53,7 @@ public class AuthController {
     @Autowired
     private RoleRepository roleRepository;
 
-    @Autowired
-    private OrderRepository orderRepository;
-
-    @Autowired
-    private OrderItemRepository orderItemRepository;
-
-    @Autowired
-    private ReviewRepository reviewRepository;
+  
 
 //    @Autowired
 //    private PasswordEncoder encoder;

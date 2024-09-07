@@ -12,11 +12,9 @@ import com.DDN.login.payload.filter.FilterAttributesResponse;
 import com.DDN.login.payload.filter.HomeTabsDataResponse;
 import com.DDN.login.payload.filter.MainScreenResponse;
 import com.DDN.login.payload.filter.SearchSuggestionResponse;
-import com.DDN.login.repository.dao.categories.ApparelCategoryRepository;
-import com.DDN.login.repository.dao.categories.PriceRangeCategoryRepository;
-import com.DDN.login.repository.dao.categories.ProductBrandCategoryRepository;
 import com.DDN.login.repository.dao.info.ProductInfoRepository;
 import com.DDN.login.security.service.interfaces.CommonDataService;
+
 import com.stripe.Stripe;
 import com.stripe.model.Charge;
 import com.stripe.param.ChargeCreateParams;
@@ -34,7 +32,6 @@ import org.springframework.web.bind.annotation.*;
 import java.sql.Timestamp;
 import java.util.*;
 
-
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
 @RequestMapping("/commondata")
@@ -47,16 +44,17 @@ public class CommonDataController {
     CommonDataService commonDataService;
 
 
-
-    @Autowired
-    private ApparelCategoryRepository apparelCategoryRepository;
-    @Autowired
-    private ProductBrandCategoryRepository productBrandCategoryRepository;
-    @Autowired
-    private PriceRangeCategoryRepository priceRangeCategoryRepository;
+    // @Autowired
+    // private ApparelCategoryRepository apparelCategoryRepository;
+    // @Autowired
+    // private ProductBrandCategoryRepository productBrandCategoryRepository;
+    // @Autowired
+    // private PriceRangeCategoryRepository priceRangeCategoryRepository;
     @Autowired
     private ProductInfoRepository productInfoRepository;
 
+
+   
 
     @PostMapping("/payment")
     public ResponseEntity<PaymentStatus> chargeCustomer(@RequestBody CardToken cardToken) {
@@ -68,23 +66,21 @@ public class CommonDataController {
         PaymentStatus paymentStatus;
 
         try {
-            ChargeCreateParams params =
-                    ChargeCreateParams.builder()
-                            .setAmount(cardToken.getAmount())
-                            .setCurrency(cardToken.getCurrency())
-                            .setDescription("Shopper Buy")
-                            .setSource(cardToken.getId())
-                            .build();
+            ChargeCreateParams params = ChargeCreateParams.builder()
+                    .setAmount(cardToken.getAmount())
+                    .setCurrency(cardToken.getCurrency())
+                    .setDescription("Shopper Buy")
+                    .setSource(cardToken.getId())
+                    .build();
 
             charge = Charge.create(params);
-           
+
             Timestamp timestamp = new Timestamp(System.currentTimeMillis());
 
             paymentStatus = new PaymentStatus(timestamp.getTime(), false,
                     charge.getId(),
                     charge.getBalanceTransaction(),
-                    charge.getReceiptUrl()
-            );
+                    charge.getReceiptUrl());
 
         } catch (Exception e) {
             paymentStatus = new PaymentStatus();
@@ -94,15 +90,14 @@ public class CommonDataController {
         }
 
         System.out.println("Payment is successful....");
-//        System.out.println(paymentStatus.get();
+        // System.out.println(paymentStatus.get();
         return ResponseEntity.ok(paymentStatus);
     }
-
 
     @GetMapping(value = "/products", params = "q")
     public ResponseEntity<?> getProductsByCategories(@RequestParam("q") String queryPrams) {
         ProductInfoDTO productInfoDTO = commonDataService.getProductsByCategories(queryPrams);
-        if(productInfoDTO == null) {
+        if (productInfoDTO == null) {
             return ResponseEntity.badRequest().body("Query has not followed the required format.");
         }
         return ResponseEntity.ok(productInfoDTO);
@@ -112,7 +107,7 @@ public class CommonDataController {
     public ResponseEntity<?> getProductsById(@RequestParam("product_id") String queryParams) {
         HashMap<Integer, ProductDTOReceiveFromSQL> resultMap = commonDataService.getProductsById(queryParams);
 
-        if(resultMap == null) {
+        if (resultMap == null) {
             return ResponseEntity.badRequest().body("Query has not followed the required format.");
         }
         return ResponseEntity.ok(resultMap);
@@ -121,7 +116,7 @@ public class CommonDataController {
     @GetMapping("/home")
     public ResponseEntity<?> getMainScreenData() {
         MainScreenResponse mainScreenResponse = commonDataService.getHomeScreenData("homeAPI");
-        if(mainScreenResponse == null) {
+        if (mainScreenResponse == null) {
             return new ResponseEntity<Error>(HttpStatus.CONFLICT);
         }
         return ResponseEntity.ok(mainScreenResponse);
@@ -142,8 +137,8 @@ public class CommonDataController {
 
         // TODO: Add support for productname parameter for filter selection.
         String[] splitParams = queryParams.split("=");
-        if(splitParams.length >= 1 && splitParams[0].equals("productname")){
-            queryParams="category=all";
+        if (splitParams.length >= 1 && splitParams[0].equals("productname")) {
+            queryParams = "category=all";
         }
 
         FilterAttributesResponse result = commonDataService.getFilterAttributesByProducts(queryParams);
@@ -181,7 +176,8 @@ public class CommonDataController {
     }
 
     @RequestMapping(value = "/add", method = RequestMethod.POST, consumes = "multipart/form-data")
-    public ResponseEntity<ApiResponse> addProduct(@RequestHeader HttpHeaders headers, @ModelAttribute ProductDto productDto){
+    public ResponseEntity<ApiResponse> addProduct(@RequestHeader HttpHeaders headers,
+            @ModelAttribute ProductDto productDto) {
 
         commonDataService.addProduct(productDto, productDto.getImages());
         return new ResponseEntity<ApiResponse>(new ApiResponse(true, "Product has been added"), HttpStatus.CREATED);
@@ -189,10 +185,9 @@ public class CommonDataController {
 
     @GetMapping("/getAllProducts")
     public ResponseEntity<Map<String, Object>> getAllProducts(@RequestParam int page, @RequestParam int pageSize) {
-//        List<ProductInfo> productInfos = commonDataService.getAllProduct();
-//        return new ResponseEntity<List<ProductInfo>>(productInfos,HttpStatus.OK);
+      
         List<ProductInfo> products = new ArrayList<ProductInfo>();
-        Pageable pagingSort = PageRequest.of(page,pageSize);
+        Pageable pagingSort = PageRequest.of(page, pageSize);
         Page<ProductInfo> pageProducts;
 
         pageProducts = productInfoRepository.findAll(pagingSort);
@@ -207,7 +202,7 @@ public class CommonDataController {
     }
 
     @GetMapping("/detail/{id}")
-    public ResponseEntity<ProductDTOReceiveFromSQL> findById(@PathVariable Integer id){
+    public ResponseEntity<ProductDTOReceiveFromSQL> findById(@PathVariable Integer id) {
         Optional<ProductInfo> productDto = productInfoRepository.findById(id);
 
         ProductDTOReceiveFromSQL productDTOReceiveFromSQL = new ProductDTOReceiveFromSQL();
@@ -227,12 +222,11 @@ public class CommonDataController {
         productDTOReceiveFromSQL.setDescription(productDto.get().getDescription());
         productDTOReceiveFromSQL.setProductImages(productDto.get().getProductImages());
 
-
         return new ResponseEntity<>(productDTOReceiveFromSQL, HttpStatus.OK);
     }
 
     @DeleteMapping("/deleteProduct/{productId}")
-    public ResponseEntity<ApiResponse> deleteProduct(@PathVariable("productId") int productId){
+    public ResponseEntity<ApiResponse> deleteProduct(@PathVariable("productId") int productId) {
         productInfoRepository.deleteById(productId);
         return new ResponseEntity<ApiResponse>(new ApiResponse(true, "Product has been removed"), HttpStatus.OK);
     }

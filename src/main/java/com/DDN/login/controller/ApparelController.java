@@ -18,8 +18,6 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
-
 
 import java.util.*;
 
@@ -50,20 +48,10 @@ public class ApparelController {
     }
 
     @GetMapping("/getAllApparelCategory")
-    public ResponseEntity<Map<String, Object>> getAllApparelCategory(@RequestParam int page, @RequestParam int pagesize) {
-        List<ApparelCategory> apparelCategories = new ArrayList<>();
-        Pageable pagingSort = PageRequest.of(page, pagesize);
-        Page<ApparelCategory> pageApparels;
-
-        pageApparels = apparelCategoryRepository.findAll(pagingSort);
-        apparelCategories = pageApparels.getContent();
-
-        Map<String,Object> response = new HashMap<>();
-        response.put("apparelCategories", apparelCategories);
-        response.put("currentPage", pageApparels.getNumber());
-        response.put("totalItems", pageApparels.getTotalElements());
-        response.put("totalPages", pageApparels.getTotalPages());
-        return new ResponseEntity<>(response, HttpStatus.OK);
+    public ResponseEntity<List<ApparelCategory>> getAllApparelCategory() {
+        List<ApparelCategory> apparelCategories = apparelService.listApparelCategory();
+       
+        return new ResponseEntity<>(apparelCategories, HttpStatus.OK);
     }
 
     @GetMapping("/getAllApparelImages")
